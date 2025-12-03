@@ -1,5 +1,5 @@
 import CustomReactPlayer from "@/components/CustomReactPlayer/CustomReactPlayer";
-import VimeoPlayer from "../../components/VimeoPlayer/VimeooPlayer";
+import VimeoPlayer from "../../components/VimeoPlayer/VimeoPlayer";
 
 export default function Players() {
   // Replace with your Vimeo video URL
@@ -9,7 +9,9 @@ export default function Players() {
       <h1 className="text-white text-2xl mb-8 text-center">Custom Video Player</h1>
       <CustomReactPlayer url={vimeoUrl} />
       <h1 className="text-white text-2xl mb-8 text-center">Vimeo Video Player</h1>
-      <VimeoPlayer />
+      <div className="m-auto h-150 w-200 bg-amber-600">
+        <VimeoPlayer />
+      </div>
     </div>
   );
 }

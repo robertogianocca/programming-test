@@ -28,11 +28,20 @@ export default function CustomReactPlayer({ url }) {
   const handleProgressClick = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / rect.width;
-    const newTime = pos * duration;
-    playerRef.current?.seekTo(pos, 'fraction');
     setPlayed(pos);
-    setPlayedSeconds(newTime);
+    setPlayedSeconds(pos * duration);
+  
+    if (playerRef.current) {
+      // Use seekTo for most players
+      if (typeof playerRef.current.seekTo === 'function') {
+        playerRef.current.seekTo(pos);
+      } else if (playerRef.current.getInternalPlayer) {
+        // For Vimeo
+        playerRef.current.getInternalPlayer().then((p) => p.setCurrentTime(pos * duration));
+      }
+    }
   };
+  
 
   // Handle progress bar drag
   const handleProgressMouseDown = () => {

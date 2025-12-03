@@ -9,7 +9,7 @@ export default function Players() {
       <h1 className="text-white text-2xl mb-8 text-center">Custom Video Player</h1>
       <CustomReactPlayer url={vimeoUrl} />
       <h1 className="text-white text-2xl mb-8 text-center">Vimeo Video Player</h1>
-      <div className="m-auto h-200 w-full bg-amber-600">
+      <div className="m-auto lg:px-100 h-200 w-full">
         <VimeoPlayer />
       </div>
     </div>

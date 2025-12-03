@@ -5,6 +5,14 @@ import Image from "next/image";
 
 import Player from "@vimeo/player";
 
+import VolumeX from "./VimeoPlayerIcons/VolumeX";
+import VolumeOff from "./VimeoPlayerIcons/VolumeOff";
+import VolumeLow from "./VimeoPlayerIcons/VolumeLow";
+import VolumeHigh from "./VimeoPlayerIcons/VolumeHigh";
+import FullScreen from "./VimeoPlayerIcons/FullScreen";
+import PlayButton from "./VimeoPlayerIcons/PlayButton";
+import PauseButton from "./VimeoPlayerIcons/PauseButton";
+
 export default function VimeoPlayer({ vimeoId, spriteSrc }) {
   //
   const containerRef = useRef(null);
@@ -231,7 +239,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
             onClick={togglePlay}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 rounded-full z-20"
           >
-            PLAY BUTTON
+            <PlayButton />
           </button>
         )}
 
@@ -240,7 +248,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
             onClick={togglePlay}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 rounded-full z-20"
           >
-            PAUSE BUTTON
+            <PauseButton />
           </button>
         )}
 
@@ -264,13 +272,15 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                 className={`flex items-center ${fullscreen && "pl-130"}`}
               >
                 <button onClick={toggleMute} className="">
-                  {volume === 0
-                    ? "VOLUME X"
-                    : volume < 0.3
-                    ? "VOLUME OFF"
-                    : volume < 0.7
-                    ? "VOLUME LOW"
-                    : "VOLUME HIGH"}
+                  {volume === 0 ? (
+                    <VolumeX />
+                  ) : volume < 0.3 ? (
+                    <VolumeOff />
+                  ) : volume < 0.7 ? (
+                    <VolumeLow />
+                  ) : (
+                    <VolumeHigh />
+                  )}
                 </button>
                 {/* Volume Bar */}
                 <div
@@ -302,7 +312,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                 onClick={toggleFullscreen}
                 className={`translate-y-[-0px] ${fullscreen && "pr-130"}`}
               >
-                FULLSCREEN BUTTON
+                <FullScreen />
               </button>
             </div>
 

@@ -203,7 +203,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className={`max-w-full   ${
+      className={`max-w-full  ${
         fullscreen ? "!w-screen !h-screen !max-w-none p-0" : "max-w-3xl"
       } unused:bg-gray-700`}
     >

@@ -35,6 +35,14 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
   const playerInstanceRef = useRef(null);
   const hideControlsTimeout = useRef(null);
   const progressBarRef = useRef(null);
+  const startHideControlsTimer = () => {
+    clearHideControlsTimer();
+    hideControlsTimeout.current = setTimeout(() => setShowControls(false), 1500);
+  };
+
+  const clearHideControlsTimer = () => {
+    if (hideControlsTimeout.current) clearTimeout(hideControlsTimeout.current);
+  };
 
   useEffect(() => {
     if (!playerRef.current) return;
@@ -95,15 +103,6 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
         });
     }
   }, [vimeoId]);
-
-  const startHideControlsTimer = () => {
-    clearHideControlsTimer();
-    hideControlsTimeout.current = setTimeout(() => setShowControls(false), 1500);
-  };
-
-  const clearHideControlsTimer = () => {
-    if (hideControlsTimeout.current) clearTimeout(hideControlsTimeout.current);
-  };
 
   const togglePlay = () => {
     if (!playerInstanceRef.current) return;

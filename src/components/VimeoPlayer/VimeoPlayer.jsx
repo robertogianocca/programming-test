@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
 import Player from "@vimeo/player";
 
@@ -13,28 +12,30 @@ import FullScreen from "./VimeoPlayerIcons/FullScreen";
 import PlayButton from "./VimeoPlayerIcons/PlayButton";
 import PauseButton from "./VimeoPlayerIcons/PauseButton";
 
-export default function VimeoPlayer({ vimeoId, spriteSrc }) {
-  //
+export default function VimeoPlayer({ vimeoId }) {
+  // Refs
   const containerRef = useRef(null);
   const playerRef = useRef(null);
+  const playerInstanceRef = useRef(null);
   const volumeSliderRef = useRef(null);
   const volumeContainerRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const hideControlsTimeout = useRef(null);
 
+  // Player state
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [previousVolume, setPreviousVolume] = useState(1);
+
+  // UI state
   const [fullscreen, setFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [isDraggingProgress, setIsDraggingProgress] = useState(false);
   const [hoverTime, setHoverTime] = useState(null);
   const [hoverX, setHoverX] = useState(0);
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  const [showControls, setShowControls] = useState(true);
-  const [isDraggingProgress, setIsDraggingProgress] = useState(false);
-
-  const playerInstanceRef = useRef(null);
-  const hideControlsTimeout = useRef(null);
-  const progressBarRef = useRef(null);
 
   const startHideControlsTimer = () => {
     clearHideControlsTimer();
@@ -84,6 +85,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
     document.addEventListener("fullscreenchange", handleFullscreenChange);
 
     return () => {
+      clearHideControlsTimer();
       vimeoPlayer.destroy();
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
@@ -104,6 +106,35 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
         });
     }
   }, [vimeoId]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Only handle spacebar when not typing in an input field
+      if (e.key === " " || e.key === "Spacebar") {
+        const target = e.target;
+        const isInputField =
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable;
+
+        if (!isInputField && playerInstanceRef.current) {
+          e.preventDefault();
+          if (playing) {
+            playerInstanceRef.current.pause();
+          } else {
+            playerInstanceRef.current.play();
+            startHideControlsTimer();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [playing]);
 
   const togglePlay = () => {
     if (!playerInstanceRef.current) return;
@@ -128,7 +159,6 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
     const newTime = Math.min(Math.max(percent * duration, 0), duration);
 
     playerInstanceRef.current.setCurrentTime(newTime);
-    setCurrentTime(newTime);
   };
 
   const handleProgressHover = (e) => {
@@ -238,6 +268,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
           <button
             onClick={togglePlay}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20"
+            aria-label="Play video"
           >
             <PlayButton />
           </button>
@@ -247,6 +278,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
           <button
             onClick={togglePlay}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20"
+            aria-label="Pause video"
           >
             <PauseButton />
           </button>
@@ -258,7 +290,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
             className={`absolute bottom-0 left-0 w-full z-30 text-white transition-opacity duration-600 ${
               showControls ? "opacity-100" : "opacity-0"
             } ${
-              showControls & fullscreen && "bg-black pt-2"
+              showControls && fullscreen && "bg-black pt-2"
             }  bg-gradient-to-t from-black/100 via-black/40 via-80% to-transparent`}
           >
             {/* Top Row */}
@@ -271,7 +303,11 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                 // className="flex items-center"
                 className={`flex items-center ${fullscreen && "pl-130"}`}
               >
-                <button onClick={toggleMute} className="">
+                <button
+                  onClick={toggleMute}
+                  className=""
+                  aria-label={volume === 0 ? "Unmute" : "Mute"}
+                >
                   {volume === 0 ? (
                     <VolumeX />
                   ) : volume < 0.3 ? (
@@ -298,6 +334,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                     value={volume}
                     onChange={changeVolume}
                     className="w-full volume-slider"
+                    aria-label="Volume"
                   />
                 </div>
               </div>
@@ -311,6 +348,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
               <button
                 onClick={toggleFullscreen}
                 className={`translate-y-[-0px] ${fullscreen && "pr-130"}`}
+                aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
               >
                 <FullScreen />
               </button>
@@ -327,6 +365,12 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
+                role="slider"
+                aria-label="Video progress"
+                aria-valuemin={0}
+                aria-valuemax={duration}
+                aria-valuenow={currentTime}
+                tabIndex={0}
               >
                 {/* Progress */}
                 <div

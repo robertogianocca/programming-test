@@ -35,6 +35,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
   const playerInstanceRef = useRef(null);
   const hideControlsTimeout = useRef(null);
   const progressBarRef = useRef(null);
+
   const startHideControlsTimer = () => {
     clearHideControlsTimer();
     hideControlsTimeout.current = setTimeout(() => setShowControls(false), 1500);
@@ -236,7 +237,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
         {!playing && (
           <button
             onClick={togglePlay}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 rounded-full z-20"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20"
           >
             <PlayButton />
           </button>
@@ -245,7 +246,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
         {playing && showControls && (
           <button
             onClick={togglePlay}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 rounded-full z-20"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20"
           >
             <PauseButton />
           </button>
@@ -284,7 +285,7 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                 {/* Volume Bar */}
                 <div
                   ref={volumeSliderRef}
-                  className={`transition-all duration-200 flex items-center translate-y-[-3px] pl-2  ${
+                  className={`transition-all duration-200 hidden sm:flex items-center translate-y-[-3px] pl-2  ${
                     showVolumeSlider ? "w-30 opacity-100" : "w-0 opacity-0"
                   }`}
                   onMouseLeave={handleVolumeSliderMouseLeave}
@@ -333,15 +334,6 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                   style={{ width: `${(currentTime / duration) * 100}%` }}
                 />
 
-                {/* Handle */}
-                {/* <div
-                  className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-green-500  opacity-0 group-hover:opacity-100"
-                  style={{
-                    left: `${(currentTime / duration) * 100}%`,
-                    marginLeft: "-6px",
-                  }}
-                /> */}
-
                 {/* Hover preview */}
                 {hoverTime !== null && (
                   <>
@@ -369,25 +361,6 @@ export default function VimeoPlayer({ vimeoId, spriteSrc }) {
                     }}
                   >
                     {formatTime(hoverTime)}
-                  </div>
-                )}
-
-                {/* Hover thumbnail */}
-                {hoverTime !== null && spriteSrc && (
-                  <div
-                    className="absolute -top-32 w-40 h-22 overflow-hidden border-2 border-white rounded-lg shadow-lg"
-                    style={{
-                      left: `${hoverX}%`,
-                      transform: "translateX(-50%)",
-                    }}
-                  >
-                    <Image
-                      src={spriteSrc}
-                      alt="Thumbnail"
-                      width={320}
-                      height={180}
-                      className="object-cover w-full h-full"
-                    />
                   </div>
                 )}
               </div>

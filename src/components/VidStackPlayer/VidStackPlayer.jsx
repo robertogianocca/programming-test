@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { MediaPlayer, MediaProvider } from "@vidstack/react";
 import { PlayButton } from "@vidstack/react";
-import { PlayIcon } from "@vidstack/react/icons";
+import { PlayIcon, PauseIcon } from "@vidstack/react/icons";
 import { useMediaState } from "@vidstack/react";
 import { MuteButton } from "@vidstack/react";
 import { MuteIcon, VolumeHighIcon, VolumeLowIcon } from "@vidstack/react/icons";
@@ -74,6 +74,27 @@ export default function VidStackPlayer({ vimeoId }) {
     }
   };
 
+  // Handle click on video container to play/pause
+  const handleVideoClick = (e) => {
+    // Don't toggle if clicking on controls (buttons, sliders, etc.)
+    const target = e.target;
+    const isControlElement =
+      target.closest(".vds-button") ||
+      target.closest(".vds-slider") ||
+      target.closest(".vds-time") ||
+      target.closest(".vds-volume-slider") ||
+      target.closest(".vds-time-slider") ||
+      target.closest(".vds-play-button");
+
+    if (!isControlElement && player.current) {
+      if (paused) {
+        player.current.play();
+      } else {
+        player.current.pause();
+      }
+    }
+  };
+
   return (
     <MediaPlayer
       ref={player}
@@ -88,16 +109,25 @@ export default function VidStackPlayer({ vimeoId }) {
       }`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={handleVideoClick}
     >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
       {/* Center Play/Pause Button Overlay */}
-      {paused && (
+      {paused ? (
         <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
           <PlayButton className="vds-button vds-play-button pointer-events-auto">
             <PlayIcon />
           </PlayButton>
         </div>
+      ) : (
+        showControls && (
+          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            <PlayButton className="vds-button vds-play-button pointer-events-auto">
+              <PauseIcon />
+            </PlayButton>
+          </div>
+        )
       )}
 
       {/* Bottom Controls Overlay */}

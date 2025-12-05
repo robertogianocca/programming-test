@@ -21,6 +21,9 @@ export default function VidStackPlayer({ vimeoId }) {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const hideControlsTimeoutRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showCustomCursor, setShowCustomCursor] = useState(false);
+  const playerContainerRef = useRef(null);
 
   // Auto-hide controls when playing
   useEffect(() => {
@@ -49,8 +52,26 @@ export default function VidStackPlayer({ vimeoId }) {
   }, [paused]);
 
   // Show controls on mouse movement
-  const handleMouseMove = () => {
+  const handleMouseMove = (e) => {
     setShowControls(true);
+    
+    // Track mouse position for custom cursor (desktop only)
+    if (playerContainerRef.current) {
+      const rect = playerContainerRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      setMousePosition({ x, y });
+      
+      // Check if mouse is over controls area (bottom portion)
+      const isOverControls = y > rect.height * 0.7;
+      const isOverControlElement = e.target.closest(".vds-button") || 
+                                    e.target.closest(".vds-slider") ||
+                                    e.target.closest(".vds-time");
+      
+      // Show custom cursor only on desktop, when not over controls
+      setShowCustomCursor(!isOverControls && !isOverControlElement);
+    }
+    
     if (!paused) {
       // Reset the hide timer
       if (hideControlsTimeoutRef.current) {
@@ -64,6 +85,7 @@ export default function VidStackPlayer({ vimeoId }) {
 
   // Show controls on mouse leave (keep them visible briefly)
   const handleMouseLeave = () => {
+    setShowCustomCursor(false);
     if (!paused) {
       if (hideControlsTimeoutRef.current) {
         clearTimeout(hideControlsTimeoutRef.current);
@@ -96,21 +118,42 @@ export default function VidStackPlayer({ vimeoId }) {
   };
 
   return (
-    <MediaPlayer
-      ref={player}
-      playsInline
-      src={{
-        src: `vimeo/${vimeoId || "1132948199"}`,
-        type: "video/vimeo",
-      }}
-      autoPlay={false}
-      className={`relative w-full aspect-video bg-black ${
-        !paused && !showControls ? "cursor-none" : ""
-      }`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleVideoClick}
-    >
+    <div ref={playerContainerRef} className="relative w-full aspect-video">
+      {/* Custom Cursor - Desktop Only */}
+      {showCustomCursor && (
+        <div
+          className="hidden sm:block absolute pointer-events-none z-50"
+          style={{
+            left: `${mousePosition.x}px`,
+            top: `${mousePosition.y}px`,
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div className="bg-white/90 rounded-full p-2 shadow-lg">
+            {paused ? (
+              <PlayIcon className="w-6 h-6 text-black" />
+            ) : (
+              <PauseIcon className="w-6 h-6 text-black" />
+            )}
+          </div>
+        </div>
+      )}
+
+      <MediaPlayer
+        ref={player}
+        playsInline
+        src={{
+          src: `vimeo/${vimeoId || "1132948199"}`,
+          type: "video/vimeo",
+        }}
+        autoPlay={false}
+        className={`relative w-full h-full bg-black ${
+          showCustomCursor ? "cursor-none" : !paused && !showControls ? "cursor-none" : ""
+        }`}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleVideoClick}
+      >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
       {/* Center Play/Pause Button Overlay */}
@@ -198,5 +241,6 @@ export default function VidStackPlayer({ vimeoId }) {
         </div>
       </div>
     </MediaPlayer>
+    </div>
   );
 }

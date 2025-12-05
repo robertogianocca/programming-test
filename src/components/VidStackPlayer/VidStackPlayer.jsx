@@ -169,9 +169,9 @@ export default function VidStackPlayer({ vimeoId }) {
                 )}
               </MuteButton>
 
-              {/* Volume Slider - Shows on hover */}
+              {/* Volume Slider - Shows on hover, hidden on mobile */}
               <div
-                className={`transition-all duration-200 overflow-hidden ${
+                className={`hidden sm:block transition-all duration-200 overflow-hidden ${
                   showVolumeSlider ? "w-24 opacity-100" : "w-0 opacity-0"
                 }`}
               >

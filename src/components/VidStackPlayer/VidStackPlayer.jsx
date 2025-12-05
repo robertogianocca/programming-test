@@ -56,8 +56,19 @@ export default function VidStackPlayer({ vimeoId }) {
     setShowControls(true);
     
     // Track mouse position for custom cursor (desktop only)
-    if (playerContainerRef.current) {
-      const rect = playerContainerRef.current.getBoundingClientRect();
+    // Get the actual DOM element - in fullscreen, use the fullscreen element, otherwise use container
+    let targetElement = playerContainerRef.current;
+    
+    if (isFullscreen) {
+      // In fullscreen, get the actual fullscreen DOM element
+      const fullscreenEl = document.fullscreenElement;
+      if (fullscreenEl && fullscreenEl instanceof HTMLElement) {
+        targetElement = fullscreenEl;
+      }
+    }
+    
+    if (targetElement && typeof targetElement.getBoundingClientRect === "function") {
+      const rect = targetElement.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       setMousePosition({ x, y });
@@ -118,11 +129,35 @@ export default function VidStackPlayer({ vimeoId }) {
   };
 
   return (
-    <div ref={playerContainerRef} className="relative w-full aspect-video">
+    <div 
+      ref={playerContainerRef} 
+      className="relative w-full aspect-video"
+      style={{
+        cursor: showCustomCursor ? "none" : "default",
+      }}
+    >
+      <MediaPlayer
+        ref={player}
+        playsInline
+        src={{
+          src: `vimeo/${vimeoId || "1132948199"}`,
+          type: "video/vimeo",
+        }}
+        autoPlay={false}
+        className="relative w-full h-full bg-black"
+        style={{
+          cursor: showCustomCursor ? "none" : !paused && !showControls ? "none" : "default",
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleVideoClick}
+      >
+      <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
+
       {/* Custom Cursor - Desktop Only */}
       {showCustomCursor && (
         <div
-          className="hidden sm:block absolute pointer-events-none z-50"
+          className="hidden sm:block absolute pointer-events-none z-[9999]"
           style={{
             left: `${mousePosition.x}px`,
             top: `${mousePosition.y}px`,
@@ -138,23 +173,6 @@ export default function VidStackPlayer({ vimeoId }) {
           </div>
         </div>
       )}
-
-      <MediaPlayer
-        ref={player}
-        playsInline
-        src={{
-          src: `vimeo/${vimeoId || "1132948199"}`,
-          type: "video/vimeo",
-        }}
-        autoPlay={false}
-        className={`relative w-full h-full bg-black ${
-          showCustomCursor ? "cursor-none" : !paused && !showControls ? "cursor-none" : ""
-        }`}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleVideoClick}
-      >
-      <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
       {/* Center Play/Pause Button Overlay - Mobile Only */}
       {paused ? (

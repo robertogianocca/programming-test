@@ -81,3 +81,8 @@
   opacity: 1;
 }
 
+/* Custom cursor for VidStack player */
+.vds-player[style*="cursor: none"] {
+  cursor: none !important;
+}
+

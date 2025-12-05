@@ -156,16 +156,16 @@ export default function VidStackPlayer({ vimeoId }) {
       >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
-      {/* Center Play/Pause Button Overlay */}
+      {/* Center Play/Pause Button Overlay - Mobile Only */}
       {paused ? (
-        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none sm:hidden">
           <PlayButton className="vds-button vds-play-button pointer-events-auto">
             <PlayIcon />
           </PlayButton>
         </div>
       ) : (
         showControls && (
-          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none sm:hidden">
             <PlayButton className="vds-button vds-play-button pointer-events-auto">
               <PauseIcon />
             </PlayButton>

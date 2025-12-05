@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { MediaPlayer, MediaProvider } from "@vidstack/react";
 import { PlayButton } from "@vidstack/react";
 import { PlayIcon } from "@vidstack/react/icons";
@@ -19,6 +19,60 @@ export default function VidStackPlayer({ vimeoId }) {
   const isMuted = useMediaState("muted", player);
   const isFullscreen = useMediaState("fullscreen", player);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const hideControlsTimeoutRef = useRef(null);
+
+  // Auto-hide controls when playing
+  useEffect(() => {
+    if (paused) {
+      // Always show controls when paused
+      setShowControls(true);
+      if (hideControlsTimeoutRef.current) {
+        clearTimeout(hideControlsTimeoutRef.current);
+        hideControlsTimeoutRef.current = null;
+      }
+    } else {
+      // Hide controls after 2 seconds when playing
+      if (hideControlsTimeoutRef.current) {
+        clearTimeout(hideControlsTimeoutRef.current);
+      }
+      hideControlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 2000);
+    }
+
+    return () => {
+      if (hideControlsTimeoutRef.current) {
+        clearTimeout(hideControlsTimeoutRef.current);
+      }
+    };
+  }, [paused]);
+
+  // Show controls on mouse movement
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (!paused) {
+      // Reset the hide timer
+      if (hideControlsTimeoutRef.current) {
+        clearTimeout(hideControlsTimeoutRef.current);
+      }
+      hideControlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 2000);
+    }
+  };
+
+  // Show controls on mouse leave (keep them visible briefly)
+  const handleMouseLeave = () => {
+    if (!paused) {
+      if (hideControlsTimeoutRef.current) {
+        clearTimeout(hideControlsTimeoutRef.current);
+      }
+      hideControlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 1000);
+    }
+  };
 
   return (
     <MediaPlayer
@@ -29,7 +83,11 @@ export default function VidStackPlayer({ vimeoId }) {
         type: "video/vimeo",
       }}
       autoPlay={false}
-      className="relative w-full aspect-video bg-black"
+      className={`relative w-full aspect-video bg-black ${
+        !paused && !showControls ? "cursor-none" : ""
+      }`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
@@ -43,7 +101,11 @@ export default function VidStackPlayer({ vimeoId }) {
       )}
 
       {/* Bottom Controls Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end z-30 pointer-events-none">
+      <div
+        className={`absolute inset-0 flex flex-col justify-end z-30 pointer-events-none transition-opacity duration-300 ${
+          showControls ? "opacity-100" : "opacity-0"
+        }`}
+      >
         {/* Gradient overlay for better control visibility */}
         <div className="bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
 

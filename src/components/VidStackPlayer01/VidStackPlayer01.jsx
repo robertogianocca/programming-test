@@ -36,12 +36,15 @@ export default function VidStackPlayer01({ vimeoId }) {
   const player = useRef(null);
   // Single store subscription for multiple properties (fewer renders).
   // Because hooks run outside the MediaPlayer's rendered children, we pass the ref.
-  const { paused, volume, muted, fullscreen } = useMediaStore(player);
+  const { paused, volume, muted, fullscreen, controlsHidden } = useMediaStore(player);
 
   const src = {
     src: `vimeo/${vimeoId ?? "1132948199"}`,
     type: "video/vimeo",
   };
+
+  console.log("PAUSE" + paused);
+  console.log("CONTROLS" + controlsHidden);
 
   return (
     <MediaPlayer
@@ -53,39 +56,32 @@ export default function VidStackPlayer01({ vimeoId }) {
     >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
-      {/* Center play overlay — visible when paused */}
-      {/* Center Play/Pause Button Overlay */}
-      <div
-        // We keep it mounted always; toggle visibility with CSS so the PlayButton is present to receive clicks.
-        className={`absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-150
-    ${paused ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-      >
-        <PlayButton
-          className="vds-button vds-play-button pointer-events-auto rounded-full p-3 shadow-md"
-          aria-label={paused ? "Play" : "Pause"}
-        >
-          {/* MUST provide both icons (Play vs Pause). PlayButton will only toggle playback,
-        it's up to you to render the correct child icon. */}
-          {paused ? <PlayIcon /> : <PauseIcon />}
-        </PlayButton>
-      </div>
-
       {/* Controls container (full bottom overlay). Controls.Root gives semantic grouping attributes. */}
-      <Controls.Root className="absolute inset-0 flex flex-col justify-end z-30 pointer-events-none">
+      <Controls.Root
+        className="data-[visible]:opacity-100 opacity-0 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
+        hideOnMouseLeave={true}
+        hideDelay={1000}
+      >
         {/* gradient backdrop to improve contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+        {/* Center play overlay — visible when paused */}
+        {/* Center Play/Pause Button Overlay */}
+        <div
+          // We keep it mounted always; toggle visibility with CSS so the PlayButton is present to receive clicks.
+          className={`absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-150
+   `}
+        >
+          <PlayButton
+            className="vds-button vds-play-button pointer-events-auto rounded-full p-3 shadow-md"
+            aria-label={paused ? "Play" : "Pause"}
+          >
+            {/* MUST provide both icons (Play vs Pause). PlayButton will only toggle playback,
+        it's up to you to render the correct child icon. */}
+            {paused ? <PlayIcon /> : <PauseIcon />}
+          </PlayButton>
+        </div>
 
         <div className="relative px-4 pb-4 pt-2 pointer-events-auto">
-          {/* Time slider (top of controls row) */}
-          <div className="mb-3">
-            <TimeSlider.Root className="vds-time-slider vds-slider w-full">
-              <TimeSlider.Track className="vds-slider-track" />
-              <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
-              <TimeSlider.Progress className="vds-slider-progress vds-slider-track" />
-              <TimeSlider.Thumb className="vds-slider-thumb" />
-            </TimeSlider.Root>
-          </div>
-
           {/* Controls row */}
           <div className="flex items-center justify-between gap-4">
             {/* LEFT: Mute + Volume (use group hover; no React state) */}
@@ -137,6 +133,16 @@ export default function VidStackPlayer01({ vimeoId }) {
                 {fullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </FullscreenButton>
             </Controls.Group>
+          </div>
+
+          {/* Time slider (top of controls row) */}
+          <div className="">
+            <TimeSlider.Root className="vds-time-slider vds-slider">
+              <TimeSlider.Track className="vds-slider-track" />
+              <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
+              <TimeSlider.Progress className="vds-slider-progress vds-slider-track" />
+              <TimeSlider.Thumb className="vds-slider-thumb" />
+            </TimeSlider.Root>
           </div>
         </div>
       </Controls.Root>

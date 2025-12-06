@@ -21,16 +21,12 @@ export default function DefaultLayoutPlayer({ vimeoId }) {
   const thumbnail = "https://files.vidstack.io/sprite-fight/thumbnail.jpg"; // optional poster
 
   return (
-    <MediaPlayer
-      ref={playerRef}
-      playsInline
-      src={src}
-      className="w-full aspect-video"
-      storage="vimeo-player" // example: persist settings
-    >
+    <MediaPlayer title="..." src={src} playsInline>
       <MediaProvider />
-      <DefaultVideoLayout icons={defaultLayoutIcons} />
-      <Poster className="vds-poster" src={thumbnail} />
+      <DefaultVideoLayout
+        thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
+        icons={defaultLayoutIcons}
+      />
     </MediaPlayer>
   );
 }

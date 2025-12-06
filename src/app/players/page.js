@@ -13,15 +13,6 @@ export default function Players() {
   const vimeoId = "1132948199"; // Vimeo video ID for testing
   return (
     <div className="">
-      {/* ========== VidStack Player TEST ==========  */}
-
-      <div className="h-dvh bg-zinc-900 p-2 lg:p-8">
-        <h1 className="text-4xl text-center mb-2">VidStack Player TEST</h1>
-        <p className="text-base text-center mb-8"></p>
-        <div className="lg:w-3/5 mx-auto">
-          <VidStackPlayerTest vimeoId={vimeoId} />
-        </div>
-      </div>
       {/* ========== VidStack Player - Base 01 ==========  */}
 
       <div className="h-dvh bg-zinc-900 p-2 lg:p-8">
@@ -29,6 +20,15 @@ export default function Players() {
         <p className="text-base text-center mb-8">Rifactor di ChatGPT.</p>
         <div className="lg:w-3/5 mx-auto">
           <VidStackPlayer01 vimeoId={vimeoId} />
+        </div>
+      </div>
+      {/* ========== VidStack Player TEST ==========  */}
+
+      <div className="h-dvh bg-zinc-900 p-2 lg:p-8">
+        <h1 className="text-4xl text-center mb-2">VidStack Player TEST</h1>
+        <p className="text-base text-center mb-8"></p>
+        <div className="lg:w-3/5 mx-auto">
+          <VidStackPlayerTest vimeoId={vimeoId} />
         </div>
       </div>
       {/* ========== VidStack Player - Base 00 ==========  */}

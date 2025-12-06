@@ -58,7 +58,7 @@ export default function VidStackPlayer01({ vimeoId }) {
 
       {/* Controls container (full bottom overlay). Controls.Root gives semantic grouping attributes. */}
       <Controls.Root
-        className="data-[visible]:opacity-100 opacity-0 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
+        className="data-[visible]:opacity-100 opacity-10 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
         hideOnMouseLeave={true}
         hideDelay={1000}
       >
@@ -136,11 +136,18 @@ export default function VidStackPlayer01({ vimeoId }) {
           </div>
 
           {/* Time slider (top of controls row) */}
-          <div className="">
-            <TimeSlider.Root className="vds-time-slider vds-slider">
+          <div className="relative">
+            <TimeSlider.Root className="vds-time-slider vds-slider group">
               <TimeSlider.Track className="vds-slider-track" />
               <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
               <TimeSlider.Progress className="vds-slider-progress vds-slider-track" />
+              
+              {/* Preview tooltip with timestamp - shows on hover/drag, updates as pointer moves */}
+              <TimeSlider.Preview className="vds-slider-preview">
+                <TimeSlider.Value/>
+              </TimeSlider.Preview>
+              
+              {/* Thumb - white and visible, follows cursor on hover/drag */}
               <TimeSlider.Thumb className="vds-slider-thumb" />
             </TimeSlider.Root>
           </div>

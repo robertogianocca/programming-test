@@ -11,6 +11,8 @@
   height: 100%;
 }
 
+/* TIME SLIDER ON FOLLOW CURSOR */
+
 /* Ensure TimeSlider thumb is visible and follows cursor */
 .vds-time-slider .vds-slider-thumb {
   background-color: white !important;
@@ -38,3 +40,4 @@
   pointer-events: none;
 }
 
+/* ==================================================================== */

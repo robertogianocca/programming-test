@@ -52,13 +52,13 @@ export default function VidStackPlayer01({ vimeoId }) {
       playsInline
       src={src}
       autoPlay={false}
-      className="relative w-full aspect-video bg-black"
+      className="relative w-full aspect-video bg-red-500"
     >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
       {/* Controls container (full bottom overlay). Controls.Root gives semantic grouping attributes. */}
       <Controls.Root
-        className="data-[visible]:opacity-100 opacity-10 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
+        className="data-[visible]:opacity-100 opacity-60 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none "
         hideOnMouseLeave={true}
         hideDelay={1000}
       >
@@ -81,11 +81,11 @@ export default function VidStackPlayer01({ vimeoId }) {
           </PlayButton>
         </div>
 
-        <div className="relative px-4 pb-4 pt-2 pointer-events-auto">
+        <div className="relative px-4 pointer-events-auto ">
           {/* Controls row */}
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between">
             {/* LEFT: Mute + Volume (use group hover; no React state) */}
-            <Controls.Group className="flex items-center gap-2">
+            <Controls.Group className="flex items-center gap-2 ">
               <div className="relative group flex items-center gap-2">
                 <MuteButton
                   className="vds-button vds-mute-button text-white"
@@ -136,7 +136,7 @@ export default function VidStackPlayer01({ vimeoId }) {
           </div>
 
           {/* Time slider (top of controls row) */}
-          <div className="relative">
+          <div className="relative ">
             <TimeSlider.Root className="vds-time-slider vds-slider group">
               <TimeSlider.Track className="vds-slider-track" />
               <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />

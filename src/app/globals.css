@@ -11,33 +11,215 @@
   height: 100%;
 }
 
-/* TIME SLIDER ON FOLLOW CURSOR */
+/* ====================================================================
+   VIDSTACK PLAYER - STANDARD VIDEO PLAYER STYLING
+   ==================================================================== */
 
-/* Ensure TimeSlider thumb is visible and follows cursor */
+/* Control Bar Container */
+.vds-controls-bar {
+  min-height: 54px;
+}
+
+.vds-controls-row {
+  min-height: 40px;
+}
+
+/* Buttons - Standard Video Player Style */
+.vds-controls-bar .vds-button {
+  color: rgba(255, 255, 255, 0.9);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 0;
+}
+
+.vds-controls-bar .vds-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.vds-controls-bar .vds-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.vds-controls-bar .vds-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Center Play Button Overlay */
+.vds-play-button[data-paused="true"] {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  backdrop-filter: blur(4px);
+}
+
+.vds-play-button[data-paused="true"]:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.vds-play-button[data-paused="true"] svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Time Display */
+.vds-time {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.vds-controls-row .vds-time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress Bar - Standard Style */
+.vds-progress-container {
+  padding: 0 3px;
+  margin-bottom: 2px;
+}
+
+.vds-time-slider {
+  height: 4px;
+  cursor: pointer;
+}
+
+.vds-time-slider:hover {
+  height: 6px;
+}
+
+.vds-time-slider .vds-slider-track {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.vds-time-slider:hover .vds-slider-track {
+  height: 6px;
+}
+
+.vds-time-slider .vds-slider-progress {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 2px 0 0 2px;
+}
+
+.vds-time-slider .vds-slider-track-fill {
+  background-color: #ff0000;
+  border-radius: 2px 0 0 2px;
+}
+
+/* Progress Bar Thumb - Visible and follows cursor */
 .vds-time-slider .vds-slider-thumb {
   background-color: white !important;
   border: 2px solid white !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
-  width: 16px !important;
-  height: 16px !important;
-  opacity: 1 !important;
-  transition: opacity 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  width: 14px !important;
+  height: 14px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+  transform: translate(-50%, -50%) scale(0.8);
 }
 
 .vds-time-slider:hover .vds-slider-thumb,
 .vds-time-slider[data-dragging] .vds-slider-thumb {
   opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* Style the preview tooltip */
+.vds-time-slider[data-dragging] .vds-slider-thumb {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Preview Tooltip */
 .vds-time-slider .vds-slider-preview {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   color: white;
-  padding: 4px 8px;
+  padding: 5px 8px;
   border-radius: 4px;
   font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   white-space: nowrap;
   pointer-events: none;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-variant-numeric: tabular-nums;
+}
+
+.vds-time-slider .vds-slider-value {
+  color: white;
+}
+
+/* Volume Slider */
+.vds-volume-slider {
+  width: 80px;
+  height: 4px;
+}
+
+.vds-volume-slider .vds-slider-track {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.vds-volume-slider .vds-slider-track-fill {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 2px;
+}
+
+.vds-volume-slider .vds-slider-thumb {
+  background-color: white !important;
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
+.vds-volume-slider:hover .vds-slider-thumb,
+.vds-volume-slider[data-dragging] .vds-slider-thumb {
+  opacity: 1 !important;
+}
+
+/* Control Bar Background Gradient */
+.vds-controls-bar {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .vds-controls-bar .vds-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .vds-controls-bar .vds-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .vds-time {
+    font-size: 12px;
+  }
+}
+
+/* Accessibility - Focus states */
+.vds-button:focus-visible,
+.vds-slider:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* ==================================================================== */

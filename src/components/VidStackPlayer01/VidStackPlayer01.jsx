@@ -52,43 +52,62 @@ export default function VidStackPlayer01({ vimeoId }) {
       playsInline
       src={src}
       autoPlay={false}
-      className="relative w-full aspect-video bg-red-500"
+      className="relative w-full aspect-video bg-black"
     >
       <MediaProvider thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" />
 
       {/* Controls container (full bottom overlay). Controls.Root gives semantic grouping attributes. */}
       <Controls.Root
-        className="data-[visible]:opacity-100 opacity-60 transition-opacity absolute inset-0 flex flex-col justify-end z-30 pointer-events-none "
+        className="vds-controls-root data-[visible]:opacity-100 opacity-0 transition-opacity duration-300 absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
         hideOnMouseLeave={true}
         hideDelay={1000}
       >
-        {/* gradient backdrop to improve contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-        {/* Center play overlay — visible when paused */}
-        {/* Center Play/Pause Button Overlay */}
-        <div
-          // We keep it mounted always; toggle visibility with CSS so the PlayButton is present to receive clicks.
-          className={`absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-150
-   `}
-        >
+        {/* Gradient backdrop to improve contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pointer-events-none" />
+        
+        {/* Center Play/Pause Button Overlay - visible when paused */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
           <PlayButton
-            className="vds-button vds-play-button pointer-events-auto rounded-full p-3 shadow-md"
+            className="vds-button vds-play-button pointer-events-auto"
             aria-label={paused ? "Play" : "Pause"}
           >
-            {/* MUST provide both icons (Play vs Pause). PlayButton will only toggle playback,
-        it's up to you to render the correct child icon. */}
             {paused ? <PlayIcon /> : <PauseIcon />}
           </PlayButton>
         </div>
 
-        <div className="relative px-4 pointer-events-auto ">
-          {/* Controls row */}
-          <div className="flex items-center justify-between">
-            {/* LEFT: Mute + Volume (use group hover; no React state) */}
-            <Controls.Group className="flex items-center gap-2 ">
-              <div className="relative group flex items-center gap-2">
+        {/* Control Bar Container */}
+        <div className="vds-controls-bar relative w-full pointer-events-auto">
+          {/* Progress Bar - at the very bottom */}
+          <div className="vds-progress-container relative w-full">
+            <TimeSlider.Root className="vds-time-slider vds-slider group">
+              <TimeSlider.Track className="vds-slider-track" />
+              <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
+              <TimeSlider.Progress className="vds-slider-progress vds-slider-track" />
+              
+              {/* Preview tooltip with timestamp - shows on hover/drag, updates as pointer moves */}
+              <TimeSlider.Preview className="vds-slider-preview">
+                <TimeSlider.Value />
+              </TimeSlider.Preview>
+              
+              {/* Thumb - white and visible, follows cursor on hover/drag */}
+              <TimeSlider.Thumb className="vds-slider-thumb" />
+            </TimeSlider.Root>
+          </div>
+
+          {/* Controls Row - above progress bar */}
+          <div className="vds-controls-row flex items-center justify-between px-3 pb-2 pt-2 gap-2">
+            {/* LEFT: Play + Mute + Volume */}
+            <Controls.Group className="flex items-center gap-1">
+              <PlayButton
+                className="vds-button vds-play-button"
+                aria-label={paused ? "Play" : "Pause"}
+              >
+                {paused ? <PlayIcon /> : <PauseIcon />}
+              </PlayButton>
+              
+              <div className="relative group flex items-center">
                 <MuteButton
-                  className="vds-button vds-mute-button text-white"
+                  className="vds-button vds-mute-button"
                   aria-label="Toggle mute"
                 >
                   {muted || volume === 0 ? (
@@ -100,13 +119,9 @@ export default function VidStackPlayer01({ vimeoId }) {
                   )}
                 </MuteButton>
 
-                {/* Volume slider shows on hover (group-hover) */}
-                <div
-                  className={`absolute left-full ml-2 top-1/2 -translate-y-1/2 transition-all duration-150 overflow-hidden
-                    w-0 opacity-0 group-hover:w-28 group-hover:opacity-100`}
-                  style={{ willChange: "width, opacity" }}
-                >
-                  <div className="p-2 rounded bg-black/60 backdrop-blur-sm">
+                {/* Volume slider shows on hover */}
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 transition-all duration-200 overflow-hidden w-0 opacity-0 group-hover:w-24 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
+                  <div className="p-2 rounded bg-black/80 backdrop-blur-sm">
                     <VolumeSlider.Root className="vds-volume-slider vds-slider">
                       <VolumeSlider.Track className="vds-slider-track" />
                       <VolumeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
@@ -117,39 +132,22 @@ export default function VidStackPlayer01({ vimeoId }) {
               </div>
             </Controls.Group>
 
-            {/* CENTER: current / duration */}
-            <Controls.Group className="flex items-center gap-2 text-white text-sm">
+            {/* CENTER: Time Display */}
+            <Controls.Group className="flex items-center gap-1">
               <Time className="vds-time" type="current" />
-              <span>/</span>
+              <span className="mx-0.5">/</span>
               <Time className="vds-time" type="duration" />
             </Controls.Group>
 
-            {/* RIGHT: fullscreen */}
+            {/* RIGHT: Fullscreen */}
             <Controls.Group>
               <FullscreenButton
-                className="vds-button vds-fullscreen-button text-white"
+                className="vds-button vds-fullscreen-button"
                 aria-label="Toggle fullscreen"
               >
                 {fullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </FullscreenButton>
             </Controls.Group>
-          </div>
-
-          {/* Time slider (top of controls row) */}
-          <div className="relative ">
-            <TimeSlider.Root className="vds-time-slider vds-slider group">
-              <TimeSlider.Track className="vds-slider-track" />
-              <TimeSlider.TrackFill className="vds-slider-track-fill vds-slider-track" />
-              <TimeSlider.Progress className="vds-slider-progress vds-slider-track" />
-              
-              {/* Preview tooltip with timestamp - shows on hover/drag, updates as pointer moves */}
-              <TimeSlider.Preview className="vds-slider-preview">
-                <TimeSlider.Value/>
-              </TimeSlider.Preview>
-              
-              {/* Thumb - white and visible, follows cursor on hover/drag */}
-              <TimeSlider.Thumb className="vds-slider-thumb" />
-            </TimeSlider.Root>
           </div>
         </div>
       </Controls.Root>

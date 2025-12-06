@@ -10,10 +10,10 @@ export default function Players() {
     <div className="">
       {/* ========== VidStack Player - Custom 01 ==========  */}
 
-      <div className="h-dvh bg-slate-900 p-8">
+      <div className="h-dvh bg-slate-900 p-2 lg:p-8">
         <h1 className="text-4xl text-center mb-2">VidStack Player - Custom 01</h1>
         <p className="text-base text-center mb-8">Versione pimpata con Cursor.</p>
-        <div className="w-3/5 mx-auto">
+        <div className="lg:w-3/5 mx-auto">
           <VidStackPlayer vimeoId={vimeoId} />
         </div>
       </div>
@@ -22,7 +22,7 @@ export default function Players() {
       <div className="h-dvh bg-zinc-900 p-8">
         <h1 className="text-4xl text-center mb-2">React Player</h1>
         <p className="text-base text-center mb-8">Problematico.</p>
-        <div className="w-3/5 mx-auto">
+        <div className="lg:w-3/5 mx-auto">
           <CustomReactPlayer url={vimeoUrl} />
         </div>
       </div>

@@ -18,6 +18,9 @@
 /* Control Bar Container */
 .vds-controls-bar {
   min-height: 54px;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .vds-controls-row {
@@ -86,13 +89,29 @@
 
 /* Progress Bar - Standard Style */
 .vds-progress-container {
-  padding: 0 3px;
+  padding: 0 12px;
   margin-bottom: 2px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.vds-progress-container .vds-time-slider {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .vds-time-slider {
   height: 4px;
   cursor: pointer;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  max-width: 100%;
+  overflow: visible;
 }
 
 .vds-time-slider:hover {
@@ -103,6 +122,9 @@
   height: 4px;
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 
 .vds-time-slider:hover .vds-slider-track {
@@ -110,12 +132,12 @@
 }
 
 .vds-time-slider .vds-slider-progress {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(196, 33, 33, 0.5);
   border-radius: 2px 0 0 2px;
 }
 
 .vds-time-slider .vds-slider-track-fill {
-  background-color: #ff0000;
+  background-color: #13ac90;
   border-radius: 2px 0 0 2px;
 }
 
@@ -156,6 +178,10 @@
   margin-bottom: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   font-variant-numeric: tabular-nums;
+  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  max-width: none;
 }
 
 .vds-time-slider .vds-slider-value {

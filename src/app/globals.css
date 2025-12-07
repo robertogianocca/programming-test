@@ -15,17 +15,118 @@
    VIDSTACK PLAYER - STANDARD VIDEO PLAYER STYLING
    ==================================================================== */
 
-/* Control Bar Container */
+/* ============== CONTROL BAR STYLING ============== */
+
 .vds-controls-bar {
-  min-height: 54px;
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  backdrop-filter: blur(4px);
+  padding: 0;
+  margin: 0;
+  /* border-width: 1px;
+  border-style: solid;
+  border-color: green; */
 }
 
-.vds-controls-row {
-  min-height: 40px;
+/* ============== TIME BAR STYLING ============== */
+
+/* TIME BAR CONTAINER */
+.vds-progress-container {
+  background-color: blue;
+
 }
+
+/* TIME BAR SLIDER */
+.vds-time-slider {
+  display: flex;
+  height: 6px;
+  cursor: pointer;
+  background-color: rgb(85, 58, 149);
+  padding: 0 !important;
+  margin: 0 !important;
+  /* border-width: 1px;
+  border-style: solid;
+  border-color: red; */
+  /* line-height: 0 !important; */
+  /* align-items: center; */
+}
+
+.vds-time-slider:hover {
+  height: 6px;
+}
+
+/* ============== BUTTON ROW CONTAINER ============== */
+
+.vds-controls-row {
+  padding: 5px;
+  /* border-width: 1px;
+  border-style: solid;
+  border-color: red; */
+}
+
+
+/* ============== VOLUME CONTROLLERS ============== */
+
+/* Volume Slider */
+.vds-volume-slider {
+  width: 80px;
+  height: 4px;
+  display: flex;
+}
+
+.vds-volume-slider .vds-slider-track {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.vds-volume-slider .vds-slider-track-fill {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 2px;
+}
+
+.vds-volume-slider .vds-slider-thumb {
+  background-color: white !important;
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
+.vds-volume-slider:hover .vds-slider-thumb,
+.vds-volume-slider[data-dragging] .vds-slider-thumb {
+  opacity: 1 !important;
+}
+
+
+
+/* ============== PLAY BUTTON CENTER OVERLAY STYLING ============== */
+
+.vds-play-button {
+  width: 200px;
+  height: 200px;
+  /* width: 200px;
+  height: 200px; */
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 640px) {
+  .vds-play-button {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+
+
+
+/* Control Bar Container */
+
+
+/* .vds-controls-row {
+  min-height: 40px;
+} */
 
 /* Buttons - Standard Video Player Style */
 .vds-controls-bar .vds-button {
@@ -55,23 +156,26 @@
   height: 24px;
 }
 
+
 /* Center Play Button Overlay */
-.vds-play-button[data-paused="true"] {
+
+/* .vds-play-button[data-paused="true"] {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   width: 64px;
   height: 64px;
   backdrop-filter: blur(4px);
-}
+} */
 
-.vds-play-button[data-paused="true"]:hover {
+/* .vds-play-button[data-paused="true"]:hover {
   background-color: rgba(0, 0, 0, 0.7);
-}
+} */
 
-.vds-play-button[data-paused="true"] svg {
+/* .vds-play-button[data-paused="true"] svg {
   width: 32px;
   height: 32px;
-}
+} */
+
 
 /* Time Display */
 .vds-time {
@@ -87,45 +191,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Progress Bar - Standard Style */
-.vds-progress-container {
-  padding: 0 12px;
-  margin-bottom: 2px;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: visible;
-}
 
-.vds-progress-container .vds-time-slider {
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
-  max-width: 100%;
-}
 
-.vds-time-slider {
-  height: 4px;
-  cursor: pointer;
-  width: 100%;
-  position: relative;
-  margin: 0;
-  max-width: 100%;
-  overflow: visible;
-}
 
-.vds-time-slider:hover {
-  height: 6px;
-}
 
-.vds-time-slider .vds-slider-track {
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-}
 
 .vds-time-slider:hover .vds-slider-track {
   height: 6px;
@@ -188,40 +257,9 @@
   color: white;
 }
 
-/* Volume Slider */
-.vds-volume-slider {
-  width: 80px;
-  height: 4px;
-}
 
-.vds-volume-slider .vds-slider-track {
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-}
 
-.vds-volume-slider .vds-slider-track-fill {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 2px;
-}
 
-.vds-volume-slider .vds-slider-thumb {
-  background-color: white !important;
-  width: 12px !important;
-  height: 12px !important;
-  opacity: 0 !important;
-  transition: opacity 0.2s ease;
-}
-
-.vds-volume-slider:hover .vds-slider-thumb,
-.vds-volume-slider[data-dragging] .vds-slider-thumb {
-  opacity: 1 !important;
-}
-
-/* Control Bar Background Gradient */
-.vds-controls-bar {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
-}
 
 /* Responsive adjustments */
 @media (max-width: 640px) {

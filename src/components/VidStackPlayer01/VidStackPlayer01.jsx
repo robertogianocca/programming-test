@@ -39,7 +39,7 @@ export default function VidStackPlayer01({ vimeoId }) {
   const { paused, volume, muted, fullscreen, controlsHidden } = useMediaStore(player);
 
   const src = {
-    src: `vimeo/${vimeoId ?? "1132948199"}`,
+    src: `vimeo/${vimeoId ?? "917201659"}`,
     type: "video/vimeo",
   };
 
@@ -59,8 +59,8 @@ export default function VidStackPlayer01({ vimeoId }) {
       {/* Controls container (full bottom overlay). Controls.Root gives semantic grouping attributes. */}
       <Controls.Root
         className="vds-controls-root data-[visible]:opacity-100 opacity-0 transition-opacity duration-300 absolute inset-0 flex flex-col justify-end z-30 pointer-events-none"
-        hideOnMouseLeave={true}
-        hideDelay={1000}
+        // hideOnMouseLeave={true}
+        // hideDelay={5000}
       >
         {/* Gradient backdrop to improve contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pointer-events-none" />
@@ -95,15 +95,15 @@ export default function VidStackPlayer01({ vimeoId }) {
           </div>
 
           {/* Controls Row - above progress bar */}
-          <div className="vds-controls-row flex items-center justify-between px-3 pb-2 pt-2 gap-2">
+          <div className="vds-controls-row flex items-center justify-between">
             {/* LEFT: Play + Mute + Volume */}
             <Controls.Group className="flex items-center gap-1">
-              <PlayButton
+              {/* <PlayButton
                 className="vds-button vds-play-button"
                 aria-label={paused ? "Play" : "Pause"}
               >
                 {paused ? <PlayIcon /> : <PauseIcon />}
-              </PlayButton>
+              </PlayButton> */}
               
               <div className="relative group flex items-center">
                 <MuteButton
@@ -120,7 +120,7 @@ export default function VidStackPlayer01({ vimeoId }) {
                 </MuteButton>
 
                 {/* Volume slider shows on hover */}
-                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 transition-all duration-200 overflow-hidden w-0 opacity-0 group-hover:w-24 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
+                <div className="hidden lg:block absolute left-full ml-2 top-1/2 -translate-y-1/2 transition-all duration-200  group-hover:w-24 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
                   <div className="p-2 rounded bg-black/80 backdrop-blur-sm">
                     <VolumeSlider.Root className="vds-volume-slider vds-slider">
                       <VolumeSlider.Track className="vds-slider-track" />
